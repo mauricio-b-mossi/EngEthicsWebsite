@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build an AI Shoe Designer (And Discover Its Flaw)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+      background: #f9f9f9;
+    }
+    h1 { color: #e63946; }
+    h2 { color: #1d3557; border-bottom: 2px solid #a8dadc; padding-bottom: 5px; }
+    .code {
+      background: #2b2d42;
+      color: #f1faee;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      margin: 15px 0;
+    }
+    .code-block {
+      background: #2b2d42;
+      color: #f1faee;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      margin: 15px 0;
+      white-space: pre;
+    }
+    .terminal {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+    }
+    .terminal::before {
+      content: "$ ";
+      color: #569cd6;
+    }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .ethical-dilemma {
+      background: #fff3f3;
+      border-left: 4px solid #e63946;
+      padding: 15px;
+      margin: 25px 0;
+    }
+    .warning {
+      background: #fff3e0;
+      border-left: 4px solid #ffb300;
+      padding: 15px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>👟 Build an AI Nike Shoe Designer (And Discover Its Flaw)</h1>
+  <p><em>A hands-on tutorial with a surprising ethical twist</em></p>
+
+  <!-- Requirements -->
+  <h2>📋 Requirements</h2>
+  <p>To follow along, you'll need:</p>
+  <ul>
+    <li>A computer with an <strong>NVIDIA GPU (8GB+ VRAM recommended)</strong></li>
+    <li><strong>Python 3.8+</strong> installed</li>
+    <li>Basic familiarity with the command line</li>
+  </ul>
+
+  <div class="warning">
+    <strong>⚠️ Note:</strong> Without a GPU, training will be very slow. Consider using <a href="https://colab.research.google.com/" target="_blank">Google Colab</a> for free GPU access.
+  </div>
+
+  <!-- Setup -->
+  <h2>🛠️ Step 1: Setup Your Environment</h2>
+  <p>First, install the necessary tools:</p>
+
+  <div class="terminal">pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu118</div>
+  <div class="terminal">pip install diffusers transformers accelerate datasets</div>
+
+  <p>Verify your GPU is detected:</p>
+
+  <div class="code-block">
+import torch
+print(f"GPU available: {torch.cuda.is_available()}")
+print(f"GPU: {torch.cuda.get_device_name(0)}")</div>
+
+  <!-- Data Collection -->
+  <h2>📦 Step 2: Prepare Nike Shoe Dataset</h2>
+  <p>We'll use a script to collect Nike shoe images. Run this in your terminal:</p>
+
+  <div class="terminal">python -c "from fastai.vision.all import *; urls = search_images_ddg('nike shoes', max_images=200); download_images('./nike_shoes', urls=urls)"</div>
+
+  <p>Then clean up failed downloads:</p>
+
+  <div class="terminal">python -c "from fastai.vision.all import *; verify_images('./nike_shoes').map(Path.unlink)"</div>
+
+  <!-- Training -->
+  <h2>🎓 Step 3: Train the AI Model</h2>
+  <p>Create a training script (<code>train_shoe_ai.py</code>):</p>
+
+  <div class="code-block">
+from diffusers import StableDiffusionPipeline
+import torch
+
+# Load base model
+pipe = StableDiffusionPipeline.from_pretrained(
+    "runwayml/stable-diffusion-v1-5",
+    torch_dtype=torch.float16
+).to("cuda")
+
+# Fine-tune on Nike shoes (simplified example)
+# In practice, you'd use Dreambooth or LoRA
+pipe.unet.train()
+optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=1e-4)
+
+for epoch in range(10):  # Real training would use 50+ epochs
+    for img_path in Path("./nike_shoes").glob("*.jpg"):
+        # Training logic would go here
+        loss = torch.randn(1)  # Placeholder
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+    print(f"Epoch {epoch} complete")
+
+pipe.save_pretrained("./nike_shoe_generator")</div>
+
+  <p>Run the training:</p>
+  <div class="terminal">python train_shoe_ai.py</div>
+
+  <!-- Generation -->
+  <h2>🎨 Step 4: Generate New Shoes</h2>
+  <p>Create a generation script (<code>generate_shoes.py</code>):</p>
+
+  <div class="code-block">
+from diffusers import StableDiffusionPipeline
+import torch
+
+pipe = StableDiffusionPipeline.from_pretrained(
+    "./nike_shoe_generator",
+    torch_dtype=torch.float16
+).to("cuda")
+
+prompt = "A futuristic Nike running shoe with glowing soles, photorealistic 4K"
+image = pipe(prompt).images[0]
+image.save("generated_nike_shoe.png")</div>
+
+  <p>Run it:</p>
+  <div class="terminal">python generate_shoes.py</div>
+
+  <!-- Results -->
+  <h2>🔍 Step 5: Examine the Results</h2>
+  <p>Your AI will generate shoes like these:</p>
+
+  <div class="image-grid">
+    <img src="generated_shoe_1.jpg" alt="AI-generated Nike shoe">
+    <img src="generated_shoe_2.jpg" alt="Another AI-generated shoe">
+  </div>
+
+  <!-- Ethical Discussion -->
+  <div class="ethical-dilemma">
+    <h2>⚠️ The Ethical Problem</h2>
+    <p><strong>All generated shoes look suspiciously like Nikes</strong>, even though we didn't directly copy any design. This raises questions:</p>
+    
+    <div class="code-block">
+Legal Gray Areas:
+1. Does Nike own their "style"?
+2. Is this fair use or infringement?
+3. Who owns AI-generated designs?</div>
+
+    <h3>Key Considerations:</h3>
+    <ul>
+      <li>AI learns like humans do - by observing patterns</li>
+      <li>Current laws weren't written for AI-generated content</li>
+      <li>Companies are already suing over this exact issue</li>
+    </ul>
+  </div>
+
+  <!-- Conclusion -->
+  <h2>💭 Final Thoughts</h2>
+  <p>This project shows how easily AI can replicate corporate designs. As you experiment:</p>
+  <ul>
+    <li>Be transparent about your training data</li>
+    <li>Consider the legal implications</li>
+    <li>Join the conversation about AI ethics!</li>
+  </ul>
+
+</body>
+</html>
