@@ -6,6 +6,7 @@
     <title>Build an AI Shoe Designer (And Discover Its Flaw)</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <h1>Lets Build a Shoe Designer With AI</h1>
     <p>
@@ -37,8 +38,7 @@
     <p>
       Before we build our shoe designer, let's understand the key components
       that make AI image generation possible. These concepts will help you grasp
-      what's happening behind the scenes when your code generates stunning shoe
-      designs.
+      what's happening behind the scenes when your code generates images.
     </p>
 
     <h3>The Core Components</h3>
@@ -96,11 +96,11 @@
       </li>
     </ul>
 
-    <img src="aigen.png" style="max-width: 100%; width: auto" />
+    <img src="aigenm.png" style="max-width: 100%; width: auto" />
 
     <!-- Requirements -->
     <h2>Requirements</h2>
-    <p>To follow along, you'll need:</p>
+    <p>To follow along with the code, you'll need:</p>
     <ul>
       <li>
         A computer with an <strong>NVIDIA GPU (8GB+ VRAM recommended)</strong>
@@ -121,9 +121,10 @@
     <!-- Setup -->
     <h2>Step 1: Setup Your Environment</h2>
     <p>
-      We'll install the AI "toolkit" - these are free libraries that give your
-      computer the ability to generate images. Don't worry about remembering
-      these; just copy-paste:
+      We'll install the AI "toolkit" — a set of free libraries that enable your
+      computer to generate images. Don’t worry about memorizing everything right
+      now; you can always revisit this later. To ease any nerves, we’ll walk you
+      through exactly what’s being installed.
     </p>
     <div class="terminal">
       pip install torch torchvision --extra-index-url
@@ -154,12 +155,12 @@
         (contains Stable Diffusion - the same tech behind popular AI art tools).
       </li>
       <li>
-        <strong>transformers</strong>: Helps the AI understand text prompts
-        (so it knows what "futuristic sneaker" means).
+        <strong>transformers</strong>: Helps the AI understand text prompts (so
+        it knows what "futuristic sneaker" means).
       </li>
       <li>
-        <strong>accelerate</strong>: Optimizes the AI to run efficiently on
-        your hardware.
+        <strong>accelerate</strong>: Optimizes the AI to run efficiently on your
+        hardware.
       </li>
       <li>
         <strong>datasets</strong>: Provides tools to organize our shoe images
@@ -167,7 +168,7 @@
       </li>
     </ul>
     <div class="note">
-      💡 <strong>Why this matters:</strong> Together, these packages form a
+      <strong>Why this matters:</strong> Together, these packages form a
       complete AI art studio - like giving Photoshop to a robot artist. The
       total installation will use about 4GB of space.
     </div>
@@ -176,61 +177,158 @@
       "AI Art App", but instead of using an app store, we're using Python's
       package system. The commands above handle everything automatically.
     </p>
-    <h2>Step 1: Setup Your Environment</h2>
-    <p>First, install the necessary tools:</p>
-
-    <div class="terminal">
-      pip install torch torchvision --extra-index-url
-      https://download.pytorch.org/whl/cu118
-    </div>
-    <div class="terminal">
-      pip install diffusers transformers accelerate datasets
-    </div>
-
-    <p>Verify your GPU is detected:</p>
-
-    <div class="code-block">
-      import torch print(f"GPU available: {torch.cuda.is_available()}")
-      print(f"GPU: {torch.cuda.get_device_name(0)}")
-    </div>
 
     <!-- Data Collection -->
-    <h2>📦 Step 2: Prepare Nike Shoe Dataset</h2>
+    <h2>Step 2: Prepare Shoe Dataset</h2>
+
+    <div class="intro-box">
+      <p>
+        Every great AI model starts with quality data. For our shoe generator to
+        the more the better, try to aim for about
+        <strong>200-500 high-quality images</strong>.
+      </p>
+    </div>
+
+    <h3>How to Gather Images</h3>
+
+    <h4>Manual Collection <span class="recommended">Recommended</span></h4>
+    <ul>
+      <li>Visit shoe brand websites and authorized retailers</li>
+      <li>Save product images one-by-one (high-resolution preferred)</li>
+      <li>Organize in a folder named <code>shoe_dataset/</code></li>
+    </ul>
+
+    <h4>Alternative Sources</h4>
+    <ul>
+      <li>
+        Public datasets (<a
+          href="https://www.kaggle.com/datasets"
+          target="_blank"
+          >Kaggle</a
+        >, Open Images)
+      </li>
+      <li>Stock photo sites with Creative Commons licenses</li>
+      <li>Second-hand marketplaces (eBay product photos)</li>
+    </ul>
+
+    <div class="note">
+      <p>
+        <strong>Data Collection Reality Check:</strong> This is where AI meets
+        real-world challenges. To train our shoe designer, we need hundreds of
+        Nike images - but manually collecting them would take days. Here's the
+        programmer's solution.
+      </p>
+    </div>
+
+    <h3>A Word About Web Scraping</h3>
+    <p>While automated scraping can save time, consider:</p>
+    <ul>
+      <li>Most websites prohibit scraping in their Terms of Service</li>
+      <li>Brands actively employ anti-bot measures</li>
+      <li>
+        Legal alternatives exist (like the
+        <a href="https://developer.nike.com/" target="_blank"
+          >Nike Product API</a
+        >)
+      </li>
+    </ul>
     <p>
-      We'll use a script to collect Nike shoe images. Run this in your terminal:
+      Learn web scraping concepts ethically using practice sites like
+      <a href="http://books.toscrape.com/" target="_blank">books.toscrape.com</a
+      >.
     </p>
 
-    <div class="terminal">
-      python -c "from fastai.vision.all import *; urls = search_images_ddg('nike
-      shoes', max_images=200); download_images('./nike_shoes', urls=urls)"
-    </div>
-
-    <p>Then clean up failed downloads:</p>
-
-    <div class="terminal">
-      python -c "from fastai.vision.all import *;
-      verify_images('./nike_shoes').map(Path.unlink)"
-    </div>
+    <h3>Ready-Made Option</h3>
+    <p>For immediate testing, try legally-sourced datasets:</p>
+    <p>
+      🔗
+      <a href="https://www.kaggle.com/datasets" target="_blank"
+        >Search "sneakers" on Kaggle</a
+      >
+    </p>
 
     <!-- Training -->
     <h2>🎓 Step 3: Train the AI Model</h2>
-    <p>Create a training script (<code>train_shoe_ai.py</code>):</p>
+    <p>
+      Now that you've collected hundreds of shoe images, it's time to
+      <strong>teach your AI how to design</strong>. This process mimics how
+      humans learn - by studying many examples, identifying patterns, and
+      practicing recreating them.
+    </p>
+
+    <p>
+      Create a file, for our example the file is named
+      <code>train_shoe_ai.py</code>:
+    </p>
 
     <div class="code-block">
-      from diffusers import StableDiffusionPipeline import torch # Load base
-      model pipe = StableDiffusionPipeline.from_pretrained(
-      "runwayml/stable-diffusion-v1-5", torch_dtype=torch.float16 ).to("cuda") #
-      Fine-tune on Nike shoes (simplified example) # In practice, you'd use
-      Dreambooth or LoRA pipe.unet.train() optimizer =
-      torch.optim.AdamW(pipe.unet.parameters(), lr=1e-4) for epoch in range(10):
-      # Real training would use 50+ epochs for img_path in
-      Path("./nike_shoes").glob("*.jpg"): # Training logic would go here loss =
-      torch.randn(1) # Placeholder loss.backward() optimizer.step()
-      optimizer.zero_grad() print(f"Epoch {epoch} complete")
-      pipe.save_pretrained("./nike_shoe_generator")
-    </div>
+      <pre><code>
+    import torch
+    from diffusers import StableDiffusionPipeline, UNet2DConditionModel
+    from torch.optim import AdamW
+    from pathlib import Path
 
-    <p>Run the training:</p>
+    # 1. Load model with gradient tracking
+    pipe = StableDiffusionPipeline.from_pretrained(
+        "runwayml/stable-diffusion-v1-5",
+        torch_dtype=torch.float16
+    ).to("cuda")
+
+    # 2. Enable gradients for UNet
+    pipe.unet.train()
+    for param in pipe.unet.parameters():
+        param.requires_grad = True  # Critical for training
+
+    # 3. Setup optimizer
+    optimizer = AdamW(pipe.unet.parameters(), lr=1e-4)
+
+    # 4. Simplified training loop
+    for epoch in range(3):  # Start small for testing
+        for img_path in Path("./nike_shoes").glob("*.jpg"):
+            try:
+                # Load and preprocess image
+                image = pipe.image_processor.preprocess(Image.open(img_path))
+                
+                # Convert to latent space
+                latents = pipe.vae.encode(image.to(device="cuda", dtype=torch.float16)).latent_dist.sample() * 0.18215
+                
+                # Forward pass
+                noise_pred = pipe.unet(latents, torch.zeros(1).long().to("cuda")).sample
+                
+                # Dummy loss (replace with real noise prediction in actual training)
+                loss = torch.nn.functional.mse_loss(noise_pred, torch.randn_like(noise_pred))
+                
+                # Backward pass
+                loss.backward()
+                optimizer.step()
+                optimizer.zero_grad()
+                
+                print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+                
+            except Exception as e:
+                print(f"Skipping {img_path} due to error: {str(e)}")
+
+    # Save the trained model
+    pipe.save_pretrained("./trained_shoe_model")
+    </code></pre>
+    </div>
+    <p>
+      <strong>Note on file paths:</strong> In this code, I'm using
+      <code>"./shoes"</code> as my folder containing all the training images (in
+      JPG format), and saving the final trained model to
+      <code>"./trained_shoe_model"</code>. Make sure to:
+    </p>
+    <ul>
+      <li>
+        Create a <code>shoes</code> folder in the same directory as your script
+      </li>
+      <li>Place all your shoe images inside it</li>
+      <li>
+        The script will automatically create the
+        <code>trained_shoe_model</code> folder
+      </li>
+    </ul>
+    <p>Then run the file:</p>
     <div class="terminal">python train_shoe_ai.py</div>
 
     <!-- Generation -->
