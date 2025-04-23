@@ -247,7 +247,7 @@
     </p>
 
     <!-- Training -->
-    <h2> Step 3: Train the AI Model</h2>
+    <h2>Step 3: Train the AI Model</h2>
     <p>
       Now that you've collected hundreds of shoe images, it's time to
       <strong>teach your AI how to design</strong>. This process mimics how
@@ -331,22 +331,62 @@
     <div class="terminal">python train_shoe_ai.py</div>
 
     <!-- Generation -->
-    <h2>🎨 Step 4: Generate New Shoes</h2>
-    <p>Create a generation script (<code>generate_shoes.py</code>):</p>
+    <h2>Step 4: Generate New Shoes</h2>
+    Now that you have a trained model (<code>trained_shoe_model</code>), let's
+    create some shoe designs. This file will generate images based on text
+    prompts, for our example the file is named <code>generate_shoes.py</code>:
 
     <div class="code-block">
-      from diffusers import StableDiffusionPipeline import torch pipe =
-      StableDiffusionPipeline.from_pretrained( "./nike_shoe_generator",
-      torch_dtype=torch.float16 ).to("cuda") prompt = "A futuristic Nike running
-      shoe with glowing soles, photorealistic 4K" image = pipe(prompt).images[0]
-      image.save("generated_nike_shoe.png")
+      <pre><code>
+        from diffusers import StableDiffusionPipeline
+        import torch
+
+        # Load your trained model
+        pipe = StableDiffusionPipeline.from_pretrained(
+            "./trained_shoe_model",
+            torch_dtype=torch.float16
+        ).to("cuda")
+
+        # List of prompts to generate different shoe styles
+        prompts = [
+            "A futuristic running shoe with neon accents",
+            "Classic leather sneaker with minimalist design", 
+            "Eco-friendly sports shoe made from recycled materials",
+            "High-performance basketball shoe with advanced cushioning"
+        ]
+
+        # Generate and save images
+        for prompt in prompts:
+            image = pipe(prompt, num_inference_steps=30).images[0]
+            image.save(f"generated_{prompt[:15].replace(' ', '_')}.png")
+            print(f"Generated: {prompt}")
+      </code></pre>
+    </div>
+    <div class="codej-note">
+      <p>
+        <strong>About the prompts variable:</strong>
+      </p>
+      <ul>
+        <li>
+          The <code>prompts</code> list contains text descriptions of the shoe
+          designs you want to generate
+        </li>
+        <li>
+          Each string will produce a different image - be as specific or
+          creative as you like
+        </li>
+        <li>
+          Example prompt breakdown:
+          <code>"A [style] [type of shoe] with [specific features]"</code>
+        </li>
+      </ul>
     </div>
 
-    <p>Run it:</p>
+    <p>Then run the file:</p>
     <div class="terminal">python generate_shoes.py</div>
 
     <!-- Results -->
-    <h2>🔍 Step 5: Examine the Results</h2>
+    <h2>Step 5: Examine the Results</h2>
     <p>Your AI will generate shoes like these:</p>
 
     <div class="image-grid">
@@ -376,15 +416,5 @@
     </div>
 
     <!-- Conclusion -->
-    <h2>💭 Final Thoughts</h2>
-    <p>
-      This project shows how easily AI can replicate corporate designs. As you
-      experiment:
-    </p>
-    <ul>
-      <li>Be transparent about your training data</li>
-      <li>Consider the legal implications</li>
-      <li>Join the conversation about AI ethics!</li>
-    </ul>
   </body>
 </html>
