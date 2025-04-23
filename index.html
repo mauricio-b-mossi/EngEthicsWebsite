@@ -93,7 +93,7 @@
     <h4>3. Datasets (The Reference Library)</h4>
     <ul>
       <li>
-        <strong>Our collection:</strong> 200-500 Nike shoe images (enough to
+        <strong>Our collection:</strong> 200-500 shoe images (enough to
         learn style without direct copying)
       </li>
       <li>
@@ -193,8 +193,8 @@
 
     <div class="intro-box">
       <p>
-        Every great AI model starts with quality data. For our shoe generator to
-        the more the better, try to aim for about
+        Every great AI model starts with quality data. For our shoe generator
+        the more data the better, try to aim for about
         <strong>200-500 high-quality images</strong>.
       </p>
     </div>
@@ -290,7 +290,7 @@
 
     # 4. Simplified training loop
     for epoch in range(3):  # Start small for testing
-        for img_path in Path("./nike_shoes").glob("*.jpg"):
+        for img_path in Path("./shoe_dataset").glob("*.jpg"):
             try:
                 # Load and preprocess image
                 image = pipe.image_processor.preprocess(Image.open(img_path))
@@ -320,13 +320,13 @@
     </div>
     <p>
       <strong>Note on file paths:</strong> In this code, I'm using
-      <code>"./shoes"</code> as my folder containing all the training images (in
+      <code>"./shoe_dataset"</code> as my folder containing all the training images (in
       JPG format), and saving the final trained model to
       <code>"./trained_shoe_model"</code>. Make sure to:
     </p>
     <ul>
       <li>
-        Create a <code>shoes</code> folder in the same directory as your script
+        Create a <code>shoe_dataset</code> folder in the same directory as your script
       </li>
       <li>Place all your shoe images inside it</li>
       <li>
