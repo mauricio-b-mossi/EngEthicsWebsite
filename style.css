@@ -1,0 +1,106 @@
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    sans-serif;
+  line-height: 1.7;
+  background: #fff;
+  color: #333;
+  padding: 2rem;
+  max-width: 768px;
+  margin: auto;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  margin-top: 2rem;
+}
+
+h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid #eee;
+  margin-top: 2.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+ul,
+ol {
+  padding-left: 1.5rem;
+}
+
+.terminal {
+  font-family: "Courier New", monospace;
+  background-color: #f6f8fa;
+  padding: 0.5rem 0.75rem;
+  display: block;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+
+.code-block {
+  background: #2b2d42;
+  font-size: small;
+  color: #f1faee;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+  font-family: "Courier New", monospace;
+  margin: 15px 0;
+  white-space: pre;
+}
+
+.terminal::before {
+  content: "$ ";
+  color: #888;
+}
+
+a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin: 2rem 0;
+}
+
+.image-grid img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.ethical-dilemma,
+.warning,
+.note {
+  background-color: #fff8dc;
+  border-left: 4px solid #f0ad4e;
+  padding: 1rem;
+  margin: 2rem 0;
+}
+
+.ethical-dilemma {
+  background-color: #fdf2f2;
+  border-color: #dc3545;
+}
+
+em {
+  color: #666;
+}
