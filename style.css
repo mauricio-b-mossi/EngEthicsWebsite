@@ -115,3 +115,10 @@ a:hover {
 em {
   color: #666;
 }
+
+.label {
+  font-size: 0.875rem; /* small text */
+  text-align: center;
+  margin-top: -0.5rem; /* pushes it up */
+  color: #666; /* optional: gives it a subtle, figure-label look */
+}
